@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'package:get/get_connect.dart';
 import 'package:get/get.dart';
-
 import '../utility/constants.dart';
-
 
 class HttpService  {
   final String baseUrl = MAIN_URL;
 
+  //? to send get request
   Future<Response> getItems({required String endpointUrl}) async {
     try {
       return await GetConnect().get('$baseUrl/$endpointUrl');
@@ -17,6 +16,7 @@ class HttpService  {
   }
 
 
+  //? to send post request
   Future<Response> addItem({required String endpointUrl, required dynamic itemData}) async {
     try {
       final response = await GetConnect().post('$baseUrl/$endpointUrl',itemData);
@@ -29,6 +29,7 @@ class HttpService  {
   }
 
 
+  //? to send put or update request
   Future<Response> updateItem({required String endpointUrl, required String itemId, required dynamic itemData}) async {
     try {
       return await GetConnect().put('$baseUrl/$endpointUrl/$itemId', itemData);
@@ -37,6 +38,7 @@ class HttpService  {
     }
   }
 
+  //? to send delete request
   Future<Response> deleteItem({required String endpointUrl, required String itemId}) async {
     try {
       return await GetConnect().delete('$baseUrl/$endpointUrl/$itemId');

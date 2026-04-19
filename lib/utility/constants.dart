@@ -1,15 +1,11 @@
+import 'package:flutter/material.dart';
 
-const String MAIN_URL = "http://192.168.196.54:3000";
+const String MAIN_URL = "http://172.16.31.87:3000";
 
 
+const primaryColor = Color(0xFF2697FF);
+const secondaryColor = Color(0xFF2A2D3E);
+const bgColor = Color(0xFF212332);
+const defaultPadding = 16.0;
 
 
-const FAVORITE_PRODUCT_BOX = 'FAVORITE_PRODUCT_BOX';
-const USER_INFO_BOX = 'USER_INFO_BOX';
-
-const PHONE_KEY = 'PHONE_KEY';
-const STREET_KEY = 'STREET_KEY';
-const CITY_KEY = 'CITY_KEY';
-const STATE_KEY = 'STATE_KEY';
-const POSTAL_CODE_KEY = 'POSTAL_CODE_KEY';
-const COUNTRY_KEY = 'COUNTRY_KEY';

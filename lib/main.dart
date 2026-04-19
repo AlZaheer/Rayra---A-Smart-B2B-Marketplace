@@ -1,68 +1,57 @@
-import 'screen/home_screen.dart';
-import 'screen/login_screen/login_screen.dart';
-import 'screen/splash_screen.dart';
-import 'screen/login_screen/provider/user_provider.dart';
-import 'screen/product_by_category_screen/provider/product_by_category_provider.dart';
-import 'screen/product_cart_screen/provider/cart_provider.dart';
-import 'screen/product_details_screen/provider/product_detail_provider.dart';
-import 'screen/product_favorite_screen/provider/favorite_provider.dart';
-import 'screen/profile_screen/provider/profile_provider.dart';
-import 'utility/app_theme.dart';
-import 'utility/extensions.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cart/cart.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'dart:ui' show PointerDeviceKind;
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'core/data/data_provider.dart';
-import 'models/user.dart';
+import 'core/routes/app_pages.dart';
+import 'screens/brands/provider/brand_provider.dart';
+import 'screens/category/provider/category_provider.dart';
+import 'screens/coupon_code/provider/coupon_code_provider.dart';
+import 'screens/dashboard/provider/dash_board_provider.dart';
+import 'screens/main/main_screen.dart';
+import 'screens/main/provider/main_screen_provider.dart';
+import 'screens/notification/provider/notification_provider.dart';
+import 'screens/order/provider/order_provider.dart';
+import 'screens/posters/provider/poster_provider.dart';
+import 'screens/sub_category/provider/sub_category_provider.dart';
+import 'screens/variants/provider/variant_provider.dart';
+import 'screens/variants_type/provider/variant_type_provider.dart';
+import 'utility/constants.dart';
+import 'utility/extensions.dart';
 
-
-Future<void> main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
-  var cart = FlutterCart();
-
-  //todo should complete add one signal app id
-  OneSignal.initialize("a068db9a-4417-46f7-99cf-fc758ac895a7");
-  OneSignal.Notifications.requestPermission(true);
-  await cart.initializeCart(isPersistenceSupportEnabled: true);
-
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => DataProvider()),
-        ChangeNotifierProvider(create: (context) => UserProvider(context.dataProvider)),
-        ChangeNotifierProvider(create: (context) => ProfileProvider(context.dataProvider)),
-        ChangeNotifierProvider(create: (context) => ProductByCategoryProvider(context.dataProvider)),
-        ChangeNotifierProvider(create: (context) => ProductDetailProvider(context.dataProvider)),
-        ChangeNotifierProvider(create: (context) => CartProvider(context.userProvider)),
-        ChangeNotifierProvider(create: (context) => FavoriteProvider(context.dataProvider)),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => DataProvider()),
+    ChangeNotifierProvider(create: (context) => MainScreenProvider()),
+    ChangeNotifierProvider(create: (context) => CategoryProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => SubCategoryProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => BrandProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => VariantsTypeProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => VariantsProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => DashBoardProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => CouponCodeProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => PosterProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => OrderProvider(context.dataProvider)),
+    ChangeNotifierProvider(create: (context) => NotificationProvider(context.dataProvider)),
+  ], child: MyApp()));
 }
 
-
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    User? loginUser = context.userProvider.getLoginUsr();
     return GetMaterialApp(
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-        },
-      ),
       debugShowCheckedModeBanner: false,
-      home: loginUser?.sId == null ? SplashScreen() : const HomeScreen(),
-      theme: AppTheme.lightAppTheme,
+      title: 'Flutter Admin Panel',
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: bgColor,
+        textTheme: GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme).apply(bodyColor: Colors.white),
+        canvasColor: secondaryColor,
+      ),
+      initialRoute: AppPages.HOME,
+      unknownRoute: GetPage(name: '/notFount', page: () => MainScreen()),
+      defaultTransition: Transition.cupertino,
+      getPages: AppPages.routes,
     );
   }
 }

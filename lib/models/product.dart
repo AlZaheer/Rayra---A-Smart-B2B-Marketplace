@@ -37,7 +37,7 @@ class Product {
     name = json['name'];
     description = json['description'];
     quantity = json['quantity'];
-    price = json['price']?.toDouble();
+    price = json['price']?.toDouble();;
     offerPrice = json['offerPrice']?.toDouble();;
     proCategoryId = json['proCategoryId'] != null
         ? new ProRef.fromJson(json['proCategoryId'])
